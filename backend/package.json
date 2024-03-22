@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "signature_pad": "^4.2.0"
   }
 }
