@@ -225,6 +225,6 @@ document.querySelector(".print_terms_button").addEventListener("click", () => {
     agreeWithTermsCheckboxErrorText.innerHTML = "Please agree to the terms";
     return false;
   } else {
-    doc.save(`test.pdf`);
+    doc.save(`Terms and conditions_${date}.pdf`);
   }
 });
