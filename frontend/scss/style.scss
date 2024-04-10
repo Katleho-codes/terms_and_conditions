@@ -2,7 +2,10 @@
 *::before,
 *::after {
     box-sizing: border-box;
+
 }
+
+
 
 html,
 body {
@@ -11,6 +14,30 @@ body {
     margin: 0;
     padding: 0;
     background-color: #fff;
+}
+
+
+// Variables
+
+$dark-text: #02010a;
+$light-text: #fff;
+$gray: #eee;
+
+
+@mixin textMainStyling {
+    font-family: inherit;
+    color: $dark-text;
+}
+
+@mixin mainButtonStyling {
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 .container {
@@ -24,30 +51,26 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     h1 {
+        @include textMainStyling;
         font-weight: 600;
-        font-family: inherit;
-        color: #02010a;
     }
 
     h3 {
         margin: 0;
         font-weight: 500;
-        font-family: inherit;
-        color: #02010a;
     }
 
     p {
         margin: 0;
         line-height: 2rem;
         font-weight: 400;
-        font-family: inherit;
-        color: #02010a;
     }
 
 }
 
 .signature-pad {
-    border: 1px solid #eee;
+    background-color: $light-text;
+    border: 1px solid $gray;
     margin: auto;
     max-width: 300px;
 }
@@ -59,40 +82,51 @@ body {
 }
 
 .term {
-    font-family: inherit;
-    color: #02010a;
+    @include textMainStyling;
     font-weight: 400;
-    // margin: .3rem 0;
+    margin: .3rem 0;
+
+}
+
+.bold_term {
+    justify-content: space-between;
+    list-style-type: circle;
 }
 
 .bold_term,
 .signature_heading {
-    font-family: inherit;
-    color: #02010a;
+    @include textMainStyling;
     font-weight: 500;
     // margin: .3rem 0;
 }
 
 input[type=checkbox] {
+    @include textMainStyling;
     cursor: pointer;
-    font-family: inherit;
     font-size: medium;
-    font-weight: 400;
-    color: #02010a;
+    color: $dark-text;
+}
+
+.form_terms_buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .print_terms_button {
+    @include mainButtonStyling;
     background-color: #006494;
-    color: #eee;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
+    color: $gray;
     margin: 1.3rem 0;
 
+}
+
+.termsNextBtn,
+.termsPrevBtn {
+    @include mainButtonStyling;
+    background-color: $dark-text;
+    color: $gray;
+    margin: 1.3rem 0;
 }
 
 img.customer_signature {
@@ -107,4 +141,15 @@ img.customer_signature {
     font-family: inherit;
     font-size: medium;
     font-weight: 500;
+}
+
+// multistep form
+/* Hide all steps by default: */
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
 }
