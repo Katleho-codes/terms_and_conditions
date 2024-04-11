@@ -24,25 +24,22 @@ body {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .header h1 {
-  font-weight: 600;
   font-family: inherit;
   color: #02010a;
+  font-weight: 600;
 }
 .header h3 {
   margin: 0;
   font-weight: 500;
-  font-family: inherit;
-  color: #02010a;
 }
 .header p {
   margin: 0;
   line-height: 2rem;
   font-weight: 400;
-  font-family: inherit;
-  color: #02010a;
 }
 
 .signature-pad {
+  background-color: #fff;
   border: 1px solid #eee;
   margin: auto;
   max-width: 300px;
@@ -57,6 +54,12 @@ body {
   font-family: inherit;
   color: #02010a;
   font-weight: 400;
+  margin: 0.3rem 0;
+}
+
+.bold_term {
+  justify-content: space-between;
+  list-style-type: circle;
 }
 
 .bold_term,
@@ -67,23 +70,45 @@ body {
 }
 
 input[type=checkbox] {
-  cursor: pointer;
   font-family: inherit;
+  color: #02010a;
+  cursor: pointer;
   font-size: medium;
-  font-weight: 400;
   color: #02010a;
 }
 
+.form_terms_buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .print_terms_button {
-  background-color: #006494;
-  color: #eee;
   border: none;
+  outline: none;
   border-radius: 5px;
   padding: 10px 20px;
   font-family: inherit;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
+  background-color: #006494;
+  color: #eee;
+  margin: 1.3rem 0;
+}
+
+.termsNextBtn,
+.termsPrevBtn {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #02010a;
+  color: #eee;
   margin: 1.3rem 0;
 }
 
@@ -99,4 +124,13 @@ img.customer_signature {
   font-family: inherit;
   font-size: medium;
   font-weight: 500;
+}
+
+/* Hide all steps by default: */
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
 }/*# sourceMappingURL=style.css.map */
