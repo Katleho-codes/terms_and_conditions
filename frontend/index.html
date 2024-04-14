@@ -28,6 +28,7 @@
           </div>
           <div class="step tab_2">
             <div>
+              <p>Please ensure you select all checkboxes</p>
               <div class="bold_terms">
                 <ol>
                   <li class="term bold_term">
@@ -78,7 +79,7 @@
                   </li>
                 </ol>
               </div>
-
+              <p class="checkbox_error"></p>
               <div>
                 <h4 class="signature_heading">Signature</h4>
                 <canvas
@@ -100,8 +101,6 @@
             </div>
           </div>
         </form>
-
-        <p class="checkbox_error"></p>
       </section>
     </main>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
@@ -114,6 +113,13 @@
         // const form = document.getElementById("multistepForm");
         const steps = form.querySelectorAll(".step");
         let currentStep = 0;
+
+        function scrollToTop() {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }
 
         function showStep(stepIndex) {
           steps.forEach(function (step, index) {
@@ -129,6 +135,7 @@
           if (currentStep < steps.length - 1) {
             currentStep++;
             showStep(currentStep);
+            scrollToTop();
           }
         }
 
@@ -136,6 +143,7 @@
           if (currentStep > 0) {
             currentStep--;
             showStep(currentStep);
+            scrollToTop();
           }
         }
 
@@ -160,7 +168,7 @@
       const signaturePad = new SignaturePad(
         document.getElementById("signature-pad"),
         {
-          backgroundColor: "rgba(255, 255, 255, 0)",
+          backgroundColor: "rgb(255, 255, 255)",
           penColor: "rgb(0, 0, 0)",
           dotSize: 1,
         }
@@ -173,6 +181,9 @@
       const termBoldTwoCheckbox = document.getElementById("term_bold_2");
       const termBoldThreeCheckbox = document.getElementById("term_bold_3");
       const termBoldFourCeckbox = document.getElementById("term_bold_4");
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const checkboxErrorText = document.querySelector(".checkbox_error");
+
       const date = new Date(
         Date.now() + 1000 * 60 * -new Date().getTimezoneOffset()
       )
@@ -184,10 +195,25 @@
         ".signature-pad_error"
       );
 
+      // At least one checkbox is checked
+      function areAllCheckboxesChecked() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        for (let i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) {
+            return true; // At least one checkbox is checked
+          }
+        }
+
+        return false; // No checkboxes are checked
+      }
+      const allChecked = areAllCheckboxesChecked();
+
+      // Fetch terms from db
       const fetchTerms = async () => {
         const terms1 = document.querySelector(".tab_1");
         const response = await fetch(
-          `http://192.168.1.126:8006/terms_and_conditions`
+          `https://bookingsapi.mmallonthemove.co.za/terms_and_conditions`
         );
         const data = await response.json();
         const filteredBoldNotTrue = data.filter(
@@ -406,8 +432,13 @@
             signaturePadErrorText.style.display = "block";
             signaturePadErrorText.innerHTML = "Please enter a signature";
             return false;
+          } else if (areAllCheckboxesChecked() === false) {
+            checkboxErrorText.style.display = "block";
+            checkboxErrorText.innerHTML = "Please select at least one checkbox";
+            return false;
           } else {
             doc.save(`Terms and conditions_${date}.pdf`);
+            window.location.href = "thankyou.html";
           }
         });
     </script>
