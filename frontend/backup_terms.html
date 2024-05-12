@@ -51,7 +51,7 @@
               </div>
               <p class="signature-pad_error"></p>
             </div>
-
+            <p class="checkbox_error"></p>
             <div>
               <h4 class="signature_heading">Signature</h4>
               <canvas
@@ -159,25 +159,11 @@
         ".signature-pad_error"
       );
 
-      // At least one checkbox is checked
-      function areAllCheckboxesChecked() {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-        for (let i = 0; i < checkboxes.length; i++) {
-          if (!checkboxes[i].checked) {
-            return false; // At least one checkbox is checked
-          }
-        }
-        return true;
-      }
-
-      const allChecked = areAllCheckboxesChecked();
-
       // Fetch terms from db
       const fetchTerms = async () => {
         const terms = document.querySelector(".tab_1");
         const response = await fetch(
-          `http://192.168.1.126:8006/backup_terms_and_conditions`
+          `https://bookingsapi.mmallonthemove.co.za/backup_terms_and_conditions`
         );
         const data = await response.json();
         const filteredBoldNotTrue = data.filter(
@@ -420,16 +406,25 @@
           // canvas integration
           doc.rect(120, 250, 80, 40, "S");
           // Add canvas signature
-          doc.addImage(`${signaturePadData}`, "image/png", 128, 250, 80, 40);
-          // console.log(areAllCheckboxesChecked());
+          doc.addImage(`${signaturePadData}`, "image/png", 135, 250, 50, 40);
+
+          // error handling to check all checkboxes are checked...?
+          var allChecked = true;
+          for (var i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) {
+              allChecked = false;
+              break;
+            }
+          }
+
           if (signaturePad.isEmpty()) {
             signaturePadErrorText.style.display = "block";
             signaturePadErrorText.innerHTML = "Please enter a signature";
             return false;
-          } else if (areAllCheckboxesChecked() === false) {
-            checkboxErrorText.style.display = "block";
-            checkboxErrorText.innerHTML = "Please select all checkboxes";
-            return false;
+          } else if (!allChecked) {
+            // checkboxErrorText.style.display = "block";
+            checkboxErrorText.innerHTML =
+              "Please check all checkboxes before submitting.";
           } else {
             doc.save(`Backup advisory_${date}.pdf`);
             window.location.href = "thankyou.html";

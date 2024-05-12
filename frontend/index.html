@@ -110,7 +110,7 @@
     <!-- <script src="/backend/index.js"></script> -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // const form = document.getElementById("multistepForm");
+        const form = document.getElementById("multistepForm");
         const steps = form.querySelectorAll(".step");
         let currentStep = 0;
 
@@ -176,7 +176,7 @@
 
       window.jsPDF = window.jspdf.jsPDF;
 
-      const form = document.getElementById("multistepForm");
+      // const form = document.getElementById("multistepForm");
       const termBoldOneCheckbox = document.getElementById("term_bold_1");
       const termBoldTwoCheckbox = document.getElementById("term_bold_2");
       const termBoldThreeCheckbox = document.getElementById("term_bold_3");
@@ -194,20 +194,6 @@
       const signaturePadErrorText = document.querySelector(
         ".signature-pad_error"
       );
-
-      // At least one checkbox is checked
-      function areAllCheckboxesChecked() {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-        for (let i = 0; i < checkboxes.length; i++) {
-          if (checkboxes[i].checked) {
-            return true; // At least one checkbox is checked
-          }
-        }
-
-        return false; // No checkboxes are checked
-      }
-      const allChecked = areAllCheckboxesChecked();
 
       // Fetch terms from db
       const fetchTerms = async () => {
@@ -333,7 +319,7 @@
             110
           );
           if (document.getElementById("term_bold_2")?.checked === true) {
-            doc.addImage(`${signaturePadData}`, "image/png", 12, 105, 10, 10);
+            doc.addImage(`${signaturePadData}`, "image/png", 130, 105, 10, 10);
           } else if (document.getElementById("term_bold_2")?.checked !== true) {
             doc.setFontSize(8);
             doc.text("(Customer did not acknowledge)", 160, 110);
@@ -424,17 +410,25 @@
           doc.text(`Date: ${date}`, 10, 225);
 
           // canvas integration
-          doc.rect(120, 240, 80, 50, "S");
+          doc.rect(110, 240, 80, 50, "S");
           // Add canvas signature
-          doc.addImage(`${signaturePadData}`, "image/png", 128, 250, 80, 50);
+          doc.addImage(`${signaturePadData}`, "image/png", 110, 246, 70, 40);
 
-          if (signaturePad.isEmpty()) {
+          // error handling to check all checkboxes are checked...?
+          var allChecked = true;
+          for (var i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) {
+              allChecked = false;
+              break;
+            }
+          }
+          if (!allChecked) {
+            checkboxErrorText.style.display = "block";
+            checkboxErrorText.innerHTML =
+              "Please check all checkboxes before submitting.";
+          } else if (signaturePad.isEmpty()) {
             signaturePadErrorText.style.display = "block";
             signaturePadErrorText.innerHTML = "Please enter a signature";
-            return false;
-          } else if (areAllCheckboxesChecked() === false) {
-            checkboxErrorText.style.display = "block";
-            checkboxErrorText.innerHTML = "Please select at least one checkbox";
             return false;
           } else {
             doc.save(`Terms and conditions_${date}.pdf`);
