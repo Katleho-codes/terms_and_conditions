@@ -12,6 +12,19 @@
     />
     <title>Draw problem</title>
     <style>
+      .tab-content .row {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      /* Responsive design: single column on small screens */
+      @media (max-width: 768px) {
+        .tab-content .row {
+          grid-template-columns: 1fr;
+        }
+      }
       .tabs {
         width: 100%;
         background: #fff;
