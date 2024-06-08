@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./scss/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Draw problem</title>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Please select where there are scratches</h1>
+      <div class="tabs">
+        <div class="tab-header">
+          <div class="tab-header-item active" data-tab="tab1">Microwave</div>
+          <div class="tab-header-item" data-tab="tab2">Fridge</div>
+          <div class="tab-header-item" data-tab="tab3">TV</div>
+          <div class="tab-header-item" data-tab="tab4">Phone/Tablet</div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-content-item active" id="tab1">
+            <div class="row">
+              <div class="col-1">
+                <div class="wrapper">
+                  <img
+                    src="../frontend/microwave front left.jpg"
+                    width="400"
+                    height="200"
+                    class="microwaveImageFront"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-microwave-front"
+                    class="signature-pad-image"
+                    width="400"
+                    height="200"
+                  ></canvas>
+                </div>
+                <button id="saveMicrowave">Save</button>
+                <button id="clearMicrowaveFront">Clear</button>
+              </div>
+              <div class="col-2">
+                <div class="wrapper">
+                  <img
+                    src="../frontend/microwave back.png"
+                    width="400"
+                    height="200"
+                    class="microwaveImageBack"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-microwave-back"
+                    class="signature-pad-image"
+                    width="400"
+                    height="200"
+                  ></canvas>
+                </div>
+                <button id="clearMicrowaveBack">Clear</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content-item" id="tab2">
+            <div class="wrapper">
+              <img
+                src="../frontend/fridge.png"
+                width="400"
+                height="200"
+                class="fridgeImage"
+                id="img"
+              />
+              <canvas
+                id="signature-pad-fridge"
+                class="signature-pad-image"
+                width="400"
+                height="200"
+              ></canvas>
+            </div>
+            <button id="saveFridge">Save</button>
+            <button id="clearFridge">Clear</button>
+          </div>
+          <div class="tab-content-item" id="tab3">
+            <div class="row">
+              <div class="col-1">
+                <div class="wrapper">
+                  <img
+                    src="../frontend/tv front.jpg"
+                    width="400"
+                    height="200"
+                    class="tvImageFront"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-tv-front"
+                    class="signature-pad-image"
+                    width="400"
+                    height="200"
+                  ></canvas>
+                </div>
+                <button id="saveTV">Save</button>
+                <button id="clearTVFront">Clear</button>
+              </div>
+              <div class="col-2">
+                <div class="wrapper">
+                  <img
+                    src="../frontend/tv back.png"
+                    width="400"
+                    height="200"
+                    class="tvImageBack"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-tv-back"
+                    class="signature-pad-image"
+                    width="400"
+                    height="200"
+                  ></canvas>
+                </div>
+                <button id="clearTVBack">Clear</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content-item" id="tab4">
+            <div class="row">
+              <div class="col-1">
+                <div class="wrapper-phone">
+                  <img
+                    src="../frontend/mobile.png"
+                    width="300"
+                    height="400"
+                    class="mobileImageFront"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-mobile-front"
+                    class="signature-pad-image"
+                    width="300"
+                    height="400"
+                  ></canvas>
+                </div>
+                <button id="saveMobile">Save</button>
+                <button id="clearMobileFront">Clear</button>
+              </div>
+              <div class="col-2">
+                <div class="wrapper-phone">
+                  <img
+                    src="../frontend/apple.png"
+                    width="300"
+                    height="400"
+                    class="mobileImageBack"
+                    id="img"
+                  />
+                  <canvas
+                    id="signature-pad-mobile-back"
+                    class="signature-pad-image"
+                    width="300"
+                    height="400"
+                  ></canvas>
+                </div>
+                <button id="clearMobileBack">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabHeaderItems = document.querySelectorAll(".tab-header-item");
+        const tabContentItems = document.querySelectorAll(".tab-content-item");
+        const microwaveImageFront = document.querySelector(
+          ".microwaveImageFront"
+        );
+        const microwaveImageBack = document.querySelector(
+          ".microwaveImageBack"
+        );
+        const fridgeImage = document.querySelector(".fridgeImage");
+
+        const tvImageFront = document.querySelector(".tvImageFront");
+        const tvImageBack = document.querySelector(".tvImageBack");
+
+        const mobileImageFront = document.querySelector(".mobileImageFront");
+        const mobileImageBack = document.querySelector(".mobileImageBack");
+
+        // Cancel buttons
+        const cancelButtonMicrowaveFront = document.getElementById(
+          "clearMicrowaveFront"
+        );
+        const cancelButtonMicrowaveBack =
+          document.getElementById("clearMicrowaveBack");
+        const cancelButtonFridge = document.getElementById("clearFridge");
+        const cancelButtonTVFront = document.getElementById("clearTVFront");
+        const cancelButtonTVBack = document.getElementById("clearTVBack");
+        const cancelButtonMobileFront =
+          document.getElementById("clearMobileFront");
+        const cancelButtonMobileBack =
+          document.getElementById("clearMobileBack");
+        tabHeaderItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            const targetTab = this.getAttribute("data-tab");
+
+            // Remove active class from all tab headers
+            tabHeaderItems.forEach((item) => item.classList.remove("active"));
+
+            // Add active class to clicked tab header
+            this.classList.add("active");
+
+            // Remove active class from all tab contents
+            tabContentItems.forEach((item) => item.classList.remove("active"));
+
+            // Add active class to corresponding tab content
+            document.getElementById(targetTab).classList.add("active");
+          });
+        });
+
+        //   Signature pads
+        const signaturePadMicrowaveFront = new SignaturePad(
+          document.getElementById("signature-pad-microwave-front"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadMicrowaveBack = new SignaturePad(
+          document.getElementById("signature-pad-microwave-back"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadFridge = new SignaturePad(
+          document.getElementById("signature-pad-fridge"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadTVFront = new SignaturePad(
+          document.getElementById("signature-pad-tv-front"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadTVBack = new SignaturePad(
+          document.getElementById("signature-pad-tv-back"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadMobileFront = new SignaturePad(
+          document.getElementById("signature-pad-mobile-front"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        const signaturePadMobileBack = new SignaturePad(
+          document.getElementById("signature-pad-mobile-back"),
+          {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            penColor: "rgb(0, 0, 0)",
+          }
+        );
+        window.jsPDF = window.jspdf.jsPDF;
+
+        // Cancel buttons events
+        cancelButtonMicrowaveFront.addEventListener("click", function (event) {
+          signaturePadMicrowaveFront?.clear();
+        });
+        cancelButtonMicrowaveBack.addEventListener("click", function (event) {
+          signaturePadMicrowaveBack?.clear();
+        });
+        cancelButtonFridge.addEventListener("click", function (event) {
+          signaturePadFridge?.clear();
+        });
+        cancelButtonTVFront.addEventListener("click", function (event) {
+          signaturePadTVFront?.clear();
+        });
+        cancelButtonTVBack.addEventListener("click", function (event) {
+          signaturePadTVBack?.clear();
+        });
+
+        cancelButtonMobileFront.addEventListener("click", function (event) {
+          signaturePadMobileFront?.clear();
+        });
+        cancelButtonMobileBack.addEventListener("click", function (event) {
+          signaturePadMobileBack?.clear();
+        });
+
+        // Microwave
+        document
+          .getElementById("saveMicrowave")
+          .addEventListener("click", (event) => {
+            event.preventDefault();
+            // console.log("clicked");
+            const doc = new jsPDF();
+            var pageWidth =
+              doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+            const signaturePadMicrowaveFrontData = signaturePadMicrowaveFront
+              ?.toDataURL("image/png")
+              ?.replace("image/png", "image/octet-stream");
+
+            doc.setFontSize(40);
+            doc.text("Scratches and dents", 35, 25);
+
+            const signaturePadMicrowaveBackData = signaturePadMicrowaveBack
+              ?.toDataURL("image/png")
+              ?.replace("image/png", "image/octet-stream");
+            doc.addImage(microwaveImageFront, "JPEG", 15, 40, 80, 40);
+            doc.addImage(microwaveImageBack, "JPEG", 100, 40, 80, 40);
+            doc.addImage(
+              signaturePadMicrowaveFrontData,
+              "image/png",
+              15,
+              40,
+              80,
+              40
+            );
+            doc.addImage(
+              signaturePadMicrowaveBackData,
+              "image/png",
+              100,
+              40,
+              80,
+              40
+            );
+            doc.save(`image.pdf`);
+          });
+
+        //  Fridge
+        document
+          .getElementById("saveFridge")
+          ?.addEventListener("click", (event) => {
+            event.preventDefault();
+            const doc = new jsPDF();
+            var pageWidth =
+              doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+
+            const signaturePadData = signaturePadFridge
+              ?.toDataURL("image/png")
+              ?.replace("image/png", "image/octet-stream");
+
+            doc.setFontSize(40);
+            doc.text("Scratches and dents", 35, 25);
+
+            doc.addImage(fridgeImage, "JPEG", 15, 40, 110, 60);
+            doc.addImage(signaturePadData, "image/png", 15, 40, 110, 60);
+            doc.save(`image.pdf`);
+          });
+
+        // TV
+        document.getElementById("saveTV").addEventListener("click", (event) => {
+          event.preventDefault();
+          // console.log("clicked");
+          const doc = new jsPDF();
+          var pageWidth =
+            doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+          const signaturePadtvFrontData = signaturePadTVFront
+            ?.toDataURL("image/png")
+            ?.replace("image/png", "image/octet-stream");
+
+          doc.setFontSize(40);
+          doc.text("Scratches and dents", 35, 25);
+
+          const signaturePadTVBackData = signaturePadTVBack
+            ?.toDataURL("image/png")
+            ?.replace("image/png", "image/octet-stream");
+          doc.addImage(tvImageFront, "JPEG", 15, 40, 80, 40);
+          doc.addImage(tvImageBack, "JPEG", 100, 40, 80, 40);
+          doc.addImage(signaturePadTVBackData, "image/png", 15, 40, 80, 40);
+          doc.addImage(signaturePadTVBackData, "image/png", 100, 40, 80, 40);
+          doc.save(`image.pdf`);
+        });
+
+        // Mobile
+        document
+          .getElementById("saveMobile")
+          .addEventListener("click", (event) => {
+            event.preventDefault();
+            // console.log("clicked");
+            const doc = new jsPDF();
+            var pageWidth =
+              doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+            const signaturePadMobileFrontData = signaturePadMobileFront
+              ?.toDataURL("image/png")
+              ?.replace("image/png", "image/octet-stream");
+
+            doc.setFontSize(40);
+            doc.text("Scratches and dents", 35, 25);
+
+            const signaturePadMobileBackData = signaturePadMobileBack
+              ?.toDataURL("image/png")
+              ?.replace("image/png", "image/octet-stream");
+            doc.addImage(mobileImageFront, "JPEG", 15, 40, 40, 80);
+            doc.addImage(mobileImageBack, "JPEG", 100, 40, 40, 80);
+            doc.addImage(
+              signaturePadMobileFrontData,
+              "image/png",
+              15,
+              40,
+              40,
+              80
+            );
+            doc.addImage(
+              signaturePadMobileBackData,
+              "image/png",
+              100,
+              40,
+              40,
+              80
+            );
+            doc.save(`image.pdf`);
+          });
+      });
+    </script>
+  </body>
+</html>
